@@ -1,5 +1,4 @@
 const PokemonPopup = ({ pokemon, setState }) => {
-  console.log(pokemon);
   return (
     <div className="fixed top-0 bottom-0 left-0 right-0 bg-slate-300 z-50">
       <div className="flex">

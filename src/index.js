@@ -3,12 +3,25 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import Loader from './components/Loader';
+import PokemonList from './pages/PokemonList';
+import PokemonContextProvider from './components/PokemonContextProvider';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <PokemonContextProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route path="pokemon-list" element={<PokemonList />} />
+        <Route path="/" element={<Loader />} exact />
+      </Routes>
+    </BrowserRouter>
+  </PokemonContextProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

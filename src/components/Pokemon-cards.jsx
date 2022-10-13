@@ -1,10 +1,12 @@
 import PokemonCard from "./Pokemon-card";
+import React from "react";
 
-const PokemonCards = ({ pokemons }) => {
+const PokemonCards = React.forwardRef(({ pokemons }, ref) => {
   return (
     <div
-      className="overflow-y-scroll container-full md:container mx-auto my-8"
+      className="container-full md:container mx-auto my-8"
       id="content"
+      ref={ref}
     >
       {pokemons
         .filter((el, i) => {
@@ -15,6 +17,6 @@ const PokemonCards = ({ pokemons }) => {
         })}
     </div>
   );
-};
+});
 
 export default PokemonCards;

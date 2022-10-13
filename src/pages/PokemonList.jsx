@@ -2,9 +2,20 @@ import Logo from "../components/Logo";
 import { useContext } from "react";
 import { PokemonContext } from "../components/PokemonContextProvider";
 import Scroll from "../components/Scroll";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const PokemonList = () => {
   const { pokemonList } = useContext(PokemonContext);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (pokemonList.length === 0) {
+      navigate("/");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
