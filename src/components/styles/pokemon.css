@@ -1,0 +1,40 @@
+body, html {
+    height: 100%;
+}
+
+#root {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-items: stretch;
+}
+
+#root > div:first-of-type {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+#root > div:nth-of-type(2) {
+    flex-grow: 1;
+}
+
+.scrolled {
+    display: flex;
+    max-width: 70rem;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.scrolled img {
+    max-width: 20rem;
+    margin: 0;
+}
+
+.scrolled > div {
+    margin: 0;
+    max-width: 50rem;
+    width: auto;
+    flex-grow: 1;
+
+}

@@ -4,9 +4,11 @@ import { PokemonContext } from "../components/PokemonContextProvider";
 import Scroll from "../components/Scroll";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useState } from "react";
 
 const PokemonList = () => {
   const { pokemonList } = useContext(PokemonContext);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const navigate = useNavigate();
 
@@ -17,9 +19,13 @@ const PokemonList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    console.log("scrolled");
+  }, [isScrolled]);
+
   return (
     <>
-      <div>
+      <div className={`${isScrolled && "scrolled"}`}>
         <Logo />
         <div className="bg-white container-full md:container mx-auto rounded-lg px-8 flex shadow-sm">
           <input
@@ -42,7 +48,7 @@ const PokemonList = () => {
           </div>
         </div>
       </div>
-      <Scroll pokemonList={pokemonList}></Scroll>
+      <Scroll pokemonList={pokemonList} setScrolled={setIsScrolled} />
     </>
   );
 };

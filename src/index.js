@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+import './components/styles/pokemon.css';
 import reportWebVitals from './reportWebVitals';
 import Loader from './components/Loader';
 import PokemonList from './pages/PokemonList';
