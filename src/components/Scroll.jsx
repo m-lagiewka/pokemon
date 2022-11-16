@@ -6,10 +6,11 @@ import { useSearchParams } from "react-router-dom";
 
 const Scroll = ({ pokemonList, setScrolled }) => {
   const listInnerRef = useRef();
-  const [currPage, setCurrPage] = useState(1); // storing current page number
-  const [pokemons, setPokemons] = useState([]); // storing list
-  const [pageIndex, setPageIndex] = useState(new Set());
   const [viewedPages, setViewedPages] = useState(new Set());
+  const [pokemons, setPokemons] = useState([]); // storing list
+  const [currPage, setCurrPage] = useState(0); // storing current page number
+  const [pageIndex, setPageIndex] = useState(new Set());
+
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [throttleTO, setThrottleTO] = useState(null);
@@ -37,10 +38,10 @@ const Scroll = ({ pokemonList, setScrolled }) => {
       let index = Array.from(pageIndex).findIndex((v) => v >= scrollTop);
 
       if (scrollTop + clientHeight > scrollHeight - 10 && index < currPage) {
-        setLink(currPage + 1);
+        // setLink(currPage + 1);
         setPageIndex(pageIndex.add(scrollTop));
       } else if (index > -1 && currPage > 0) {
-        setLink(index + 1);
+        // setLink(index + 1);
       }
 
       if (scrollTop !== 0) {
@@ -51,18 +52,31 @@ const Scroll = ({ pokemonList, setScrolled }) => {
     }
   };
 
+  const fetchData = (source) => {
+    const start = currPage * 20;
+    const end = start + 20;
+    const list = source.slice(start, end) || [];
+    setPokemons([...pokemons, ...list]);
+  };
+
+  useEffect(() => {
+    console.log(pokemons);
+  }, [pokemons]);
+
   useEffect(() => {
     if (!viewedPages.has(currPage)) {
-      const fetchData = () => {
-        const start = (currPage - 1) * 20;
-        const end = start + 20;
-        const list = pokemonList.slice(start, end) || [];
-        setPokemons([...pokemons, ...list]);
-      };
-      fetchData();
+      fetchData(pokemonList);
       setViewedPages(viewedPages.add(currPage));
     }
   }, [currPage]);
+
+  useEffect(() => {
+    // console.log(pokemons);
+    setViewedPages(new Set());
+    setPokemons([]);
+    setCurrPage(0);
+    // console.log(pokemonList);
+  }, [pokemonList]);
 
   return (
     <div

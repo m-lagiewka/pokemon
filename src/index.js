@@ -4,6 +4,7 @@ import './index.css';
 import './components/styles/pokemon.css';
 import reportWebVitals from './reportWebVitals';
 import Loader from './components/Loader';
+import Test from './components/Test';
 import PokemonList from './pages/PokemonList';
 import PokemonContextProvider from './components/PokemonContextProvider';
 import {
@@ -18,6 +19,7 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path="pokemon-list" element={<PokemonList />} />
+        <Route path="testing" element={<Test />} />
         <Route path="/" element={<Loader />} exact />
       </Routes>
     </BrowserRouter>

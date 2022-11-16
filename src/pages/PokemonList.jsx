@@ -9,6 +9,7 @@ import { useState } from "react";
 const PokemonList = () => {
   const { pokemonList } = useContext(PokemonContext);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [searchResults, setSearchResults] = useState(pokemonList);
 
   const navigate = useNavigate();
 
@@ -19,9 +20,20 @@ const PokemonList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    console.log("scrolled");
-  }, [isScrolled]);
+  // useEffect(() => {
+  //   console.log("scrolled");
+  // }, [isScrolled]);
+
+  const search = (e) => {
+    let search = e.target.value;
+    if (search.length > 2) {
+      setSearchResults(
+        pokemonList.filter((pokemon) => pokemon.name.match(search))
+      );
+    } else {
+      setSearchResults(pokemonList);
+    }
+  };
 
   return (
     <>
@@ -35,6 +47,7 @@ const PokemonList = () => {
             autofill="false"
             type="text"
             placeholder="Search..."
+            onChange={search}
           />
           <div className="flex-shrink-0">
             <img
@@ -48,7 +61,7 @@ const PokemonList = () => {
           </div>
         </div>
       </div>
-      <Scroll pokemonList={pokemonList} setScrolled={setIsScrolled} />
+      <Scroll pokemonList={searchResults} setScrolled={setIsScrolled} />
     </>
   );
 };
