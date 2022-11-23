@@ -6,14 +6,48 @@ import { useSearchParams } from "react-router-dom";
 
 const Scroll = ({ pokemonList, setScrolled }) => {
   const listInnerRef = useRef();
-  const [viewedPages, setViewedPages] = useState(new Set());
+  const [currPage, setCurrPage] = useState(); // storing current page number
   const [pokemons, setPokemons] = useState([]); // storing list
-  const [currPage, setCurrPage] = useState(0); // storing current page number
   const [pageIndex, setPageIndex] = useState(new Set());
-
+  const [viewedPages, setViewedPages] = useState(new Set());
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [throttleTO, setThrottleTO] = useState(null);
+
+  const fetchData = () => {
+    const start = (currPage - 1) * 20;
+    const end = start + 20;
+    const list = pokemonList.slice(start, end) || [];
+    setPokemons([...pokemons, ...list]);
+    setViewedPages(viewedPages.add(currPage));
+  };
+
+  useEffect(() => {
+    setViewedPages(new Set());
+  }, [pokemonList]);
+
+  useEffect(() => {
+    if (viewedPages.size === 0) {
+      setPokemons([]);
+    }
+  }, [viewedPages]);
+
+  useEffect(() => {
+    if (pokemons.length === 0) {
+      setCurrPage(0);
+    }
+  }, [pokemons]);
+
+  useEffect(() => {
+    if (currPage < 1) {
+      setCurrPage(1);
+    } else {
+      if (!viewedPages.has(currPage)) {
+        console.log(currPage, viewedPages.has(currPage));
+        fetchData();
+      }
+    }
+  }, [currPage]);
 
   const setLink = useCallback(
     (page) => {
@@ -38,10 +72,10 @@ const Scroll = ({ pokemonList, setScrolled }) => {
       let index = Array.from(pageIndex).findIndex((v) => v >= scrollTop);
 
       if (scrollTop + clientHeight > scrollHeight - 10 && index < currPage) {
-        // setLink(currPage + 1);
+        setLink(currPage + 1);
         setPageIndex(pageIndex.add(scrollTop));
       } else if (index > -1 && currPage > 0) {
-        // setLink(index + 1);
+        setLink(index + 1);
       }
 
       if (scrollTop !== 0) {
@@ -51,32 +85,6 @@ const Scroll = ({ pokemonList, setScrolled }) => {
       }
     }
   };
-
-  const fetchData = (source) => {
-    const start = currPage * 20;
-    const end = start + 20;
-    const list = source.slice(start, end) || [];
-    setPokemons([...pokemons, ...list]);
-  };
-
-  useEffect(() => {
-    console.log(pokemons);
-  }, [pokemons]);
-
-  useEffect(() => {
-    if (!viewedPages.has(currPage)) {
-      fetchData(pokemonList);
-      setViewedPages(viewedPages.add(currPage));
-    }
-  }, [currPage]);
-
-  useEffect(() => {
-    // console.log(pokemons);
-    setViewedPages(new Set());
-    setPokemons([]);
-    setCurrPage(0);
-    // console.log(pokemonList);
-  }, [pokemonList]);
 
   return (
     <div
