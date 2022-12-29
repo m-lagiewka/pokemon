@@ -3,10 +3,11 @@ import { useEffect, useState } from "react";
 import { getPokemons } from "../api/getPokemonList";
 import Logo from "./Logo";
 import { PokemonContext } from "./PokemonContextProvider";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const Loader = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [width, setWidth] = useState({ width: "0%" });
   const { pokemonList, setPokemonList, counter, setCounter } =
     useContext(PokemonContext);
@@ -46,11 +47,6 @@ const Loader = () => {
 
   useEffect(() => {
     fetchPokemon();
-    // return () => {
-    //   setWidth({ width: 0 });
-    //   // setPokemonList([]);
-    //   // setCounter(0);
-    // };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -63,7 +59,15 @@ const Loader = () => {
 
   useEffect(() => {
     if (width.width === "100%") {
-      setTimeout(() => navigate("/pokemon-list"), 100);
+      setTimeout(
+        () =>
+          navigate(
+            "/pokemon-list" +
+              (searchParams.toString().length ? "?" : "") +
+              searchParams.toString()
+          ),
+        100
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [width]);

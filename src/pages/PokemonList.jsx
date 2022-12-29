@@ -2,7 +2,7 @@ import Logo from "../components/Logo";
 import { useContext } from "react";
 import { PokemonContext } from "../components/PokemonContextProvider";
 import Scroll from "../components/Scroll";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
 
@@ -10,12 +10,17 @@ const PokemonList = () => {
   const { pokemonList } = useContext(PokemonContext);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchResults, setSearchResults] = useState(pokemonList);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const navigate = useNavigate();
 
   useEffect(() => {
     if (pokemonList.length === 0) {
-      navigate("/");
+      navigate(
+        "/" +
+          (searchParams.toString().length ? "?" : "") +
+          searchParams.toString()
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -27,11 +32,13 @@ const PokemonList = () => {
   const search = (e) => {
     let search = e.target.value;
     if (search.length > 2) {
+      setSearchParams({ search: search });
       setSearchResults(
         pokemonList.filter((pokemon) => pokemon.name.match(search))
       );
     } else {
       setSearchResults(pokemonList);
+      setSearchParams({});
     }
   };
 
